@@ -545,7 +545,8 @@ function addListener(el, evt, fn) {
 }
 
 function getDomainName(url) {
-  return url.match(reURI)[3];
+  var matched = url.match(reURI);
+  return matched ? url.match(reURI)[3]: null;
 }
 
 function sendMessage(target, targetsUrl, command, params) {
@@ -579,6 +580,7 @@ var getXHR = (function() {
 
   return xmlhttp;
 }());
+
 
   // --------------------------------------------------
   // FIBER
@@ -1714,7 +1716,7 @@ var Communicator = Fiber.extend(function() {
           return;
         }
 
-        if (getDomainName(e.origin) !== getDomainName(self.env.config.relayFile)) {
+        if (e.origin === 'null' || getDomainName(e.origin) !== getDomainName(self.env.config.relayFile)) {
           return;
         }
 
@@ -1989,7 +1991,7 @@ var Executor  = Fiber.extend(function() {
     var meta = globalObject;
     var module = meta.module;
     var failed = false;
-    var sourceString = IS_IE ? '' : '//@ sourceURL=' + module.uri;
+    var sourceString = IS_IE ? '' : '//# sourceURL=' + module.uri;
     var result;
     var err;
 
@@ -4581,5 +4583,5 @@ var TreeNode = Fiber.extend(function() {
 
 
   // initialize
-  init('0.7.2');
+  init('0.7.2-3-gdedc30c');
 })(this);
